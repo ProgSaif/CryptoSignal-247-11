@@ -1,0 +1,51 @@
+# poster.py
+
+import random
+
+# -----------------------------
+# Filter leveraged tokens
+# -----------------------------
+BLOCKED_KEYWORDS = ["UP", "DOWN", "BULL", "BEAR"]
+
+def is_valid_symbol(symbol):
+    if not symbol.endswith("USDT"):
+        return False
+    for word in BLOCKED_KEYWORDS:
+        if word in symbol:
+            return False
+    return True
+
+# -----------------------------
+# Message generator
+# -----------------------------
+def generate_signal_message(coin, entry, sl, tp1, tp2, tp3, trade_type="LONG", confidence=85):
+
+    coin_name = coin.replace("USDT", "")
+
+    entry_low = entry * 0.995
+    entry_high = entry * 1.005
+
+    message = f"""
+${coin_name} — {trade_type}
+
+Entry: {entry_low:.8f} – {entry_high:.8f}
+
+SL: {sl:.8f}
+TP1: {tp1:.8f}
+TP2: {tp2:.7f}
+TP3: {tp3:.6f}
+
+People lie but chart don’t. 
+Why i choose this setup?
+• {'Buyers' if trade_type=='LONG' else 'Sellers'} are stepping back.
+• Next liquidity sits around {tp1:.6f}+
+• {confidence}% Confidence
+• If {'bulls' if trade_type=='LONG' else 'bears'} hold above {entry_low:.6f}
+• Price reclaimed the {entry:.6f} level
+• However, {coin_name} broke out consolidation range with a strong {'bullish' if trade_type=='LONG' else 'bearish'} candle. 
+• DYOR before execute trade. 
+
+{'Long' if trade_type=='LONG' else 'Short'} 👇👇${coin_name}
+"""
+
+    return message
